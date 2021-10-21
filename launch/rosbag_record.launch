@@ -1,0 +1,5 @@
+<launch>
+    <arg name="rosbag_name"    default="test_001.bag"/>
+    <arg name="rosbag_topics"  default="/camera/color/image_raw"/>
+    <node pkg="rosbag" type="record" name="rosbag_record" args="-O $(arg rosbag_name) -b 1024  $(arg rosbag_topics)" output="screen"/>
+</launch>

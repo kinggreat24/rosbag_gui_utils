@@ -1,0 +1,9 @@
+<library path="lib/librosbag_utils_gui_plugin">
+  <class name="rosbag_utils_gui/RosbagUtilsPanel"
+         type="rosbag_utils_gui::RosbagUtilsPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Rosbag utils package used for serializing and deserializing rosbags.
+    </description>
+  </class>
+</library>
