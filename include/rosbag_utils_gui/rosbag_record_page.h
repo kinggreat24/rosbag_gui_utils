@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 14:22:04
- * @LastEditTime: 2021-10-20 21:13:47
+ * @LastEditTime: 2021-10-27 09:57:33
  * @LastEditors: kinggreat24
  * @Description: 录制rosbag
  * @FilePath: /rosbag_utils_gui/include/rosbag_utils_gui/rosbag_record_page.h
@@ -38,7 +38,7 @@ public:
     
 protected Q_SLOTS:
     void onRosbagRecordSlot();
-
+    
 private:
 	QPushButton *rosbag_record_btn_;
 	QLineEdit   *content_;

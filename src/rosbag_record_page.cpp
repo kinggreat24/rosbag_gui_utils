@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 14:46:36
- * @LastEditTime: 2021-10-20 22:14:02
+ * @LastEditTime: 2021-10-27 09:48:56
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/rosbag_record_page.cpp
@@ -49,6 +49,8 @@ void RosbagRecordPage::onRosbagRecordSlot()
         this,_1,_2));
     rosbag_record_dlg_->show();
 }
+
+
 
 
 bool RosbagRecordPage::onRosbagRecordCallback(QString rosbag_name, QVector<QString> topic_names)

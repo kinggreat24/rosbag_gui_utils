@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 11:36:32
- * @LastEditTime: 2021-10-20 21:54:42
+ * @LastEditTime: 2021-10-26 18:48:36
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/rosbag_utils_panel.cpp
@@ -34,7 +34,8 @@ RosbagUtilsPanel::RosbagUtilsPanel(QWidget *parent)
 void RosbagUtilsPanel::initUI()
 {
 	setWindowIcon(QIcon("/home/kinggreat24/direct_lidar_align_ws/src/rosbag_utils_gui/icons/rosbag_record.png"));
-	setMinimumSize(640, 320);
+	setWindowTitle(QString::fromLocal8Bit("rosbag工具包"));
+    setMinimumSize(640, 320);
 	contentsWidget = new QListWidget;
 	contentsWidget->setViewMode(QListView::IconMode);
 	contentsWidget->setIconSize(QSize(96, 96));
@@ -63,8 +64,6 @@ void RosbagUtilsPanel::initUI()
 void RosbagUtilsPanel::save(rviz::Config config) const
 {
     rviz::Panel::save(config);
-
-
     // config.mapSetValue("Topic", output_topic_);
 }
 
