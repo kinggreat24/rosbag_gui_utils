@@ -1,33 +1,35 @@
 /*
  * @Author: kinggreat24
- * @Date: 2021-10-27 16:52:09
- * @LastEditTime: 2021-11-17 19:44:38
+ * @Date: 2022-03-11 11:02:30
+ * @LastEditTime: 2022-03-12 20:52:58
  * @LastEditors: kinggreat24
  * @Description: 
- * @FilePath: /rosbag_utils_gui/src/Image_handle.cpp
+ * @FilePath: /rosbag_utils_gui/src/CompressedImage_handle.cpp
  * 可以输入预定的版权声明、个性签名、空行等
  */
-#include "rosbag_utils_gui/Image_handle.h"
+
+#include "rosbag_utils_gui/CompressedImage_handle.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/CompressedImage.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include <QString>
 
-ImageHandle::ImageHandle()
+CompressedImageHandle::CompressedImageHandle()
 {
-    std::cout << "sensor_msgs/Image handle register" << std::endl;
+    std::cout << "sensor_msgs/CompressedImage handle register" << std::endl;
 }
 
-ImageHandle::~ImageHandle() {}
+CompressedImageHandle::~CompressedImageHandle() {}
 
-int ImageHandle::serialize(rosbag::MessageInstance const m)
+int CompressedImageHandle::serialize(rosbag::MessageInstance const m)
 {
-    sensor_msgs::Image::ConstPtr img_msgs = m.instantiate<sensor_msgs::Image>();
+    sensor_msgs::CompressedImage::ConstPtr img_msgs = m.instantiate<sensor_msgs::CompressedImage>();
     QString topic_name = QString::fromStdString(m.getTopic());
 
     static bool flag = false;
@@ -44,10 +46,11 @@ int ImageHandle::serialize(rosbag::MessageInstance const m)
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
-        if (img_msgs->encoding == "rgb8")
-            cv_ptr = cv_bridge::toCvCopy(img_msgs, "bgr8");
-        else
-            cv_ptr = cv_bridge::toCvCopy(img_msgs, img_msgs->encoding);
+        // if (img_msgs->format == "rgb8")
+        //     cv_ptr = cv_bridge::toCvCopy(img_msgs, sensor_msgs::image_encodings::BGR8);
+        // else
+        //     cv_ptr = cv_bridge::toCvCopy(img_msgs, img_msgs->format);
+        cv_ptr = cv_bridge::toCvCopy(img_msgs, sensor_msgs::image_encodings::BGR8);
     }
     catch (cv_bridge::Exception &e)
     {
@@ -65,4 +68,4 @@ int ImageHandle::serialize(rosbag::MessageInstance const m)
     return 0;
 }
 
-// REGISTER_MESSAGE(ImageHandle, "sensor_msgs/Image");
+// REGISTER_MESSAGE(CompressedImageHandle, "sensor_msgs/Image");

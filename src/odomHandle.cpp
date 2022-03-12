@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 19:43:53
- * @LastEditTime: 2021-10-27 19:49:57
+ * @LastEditTime: 2021-11-16 14:27:12
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/odomHandle.cpp
@@ -28,7 +28,7 @@ int OdomHandle::serialize(rosbag::MessageInstance const m)
     if(!flag)
     {
         QString odom_txt_file = m_topic_save_dirs[topic_name] + "/odom.txt";
-        ofs_odom.open(odom_txt_file);
+        ofs_odom.open(odom_txt_file.toStdString());
         flag = true;
     }
     

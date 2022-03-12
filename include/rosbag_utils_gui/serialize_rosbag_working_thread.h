@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 10:05:04
- * @LastEditTime: 2021-10-27 19:21:09
+ * @LastEditTime: 2022-03-11 11:10:03
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/include/rosbag_utils_gui/serialize_rosbag_working_thread.h
@@ -31,8 +31,11 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "rosbag_utils_gui/Image_handle.h"
+#include "rosbag_utils_gui/CompressedImage_handle.h"
 #include "rosbag_utils_gui/Laserscan_handle.h"
+#include "rosbag_utils_gui/odom_handle.h"
 #include "rosbag_utils_gui/serialize_factory.h"
+#include "rosbag_utils_gui/PointCloud2Handle.h"
 
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH

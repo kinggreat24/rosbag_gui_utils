@@ -18,6 +18,9 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   rosmaster
   rosbag
+  pcl_conversions
+  pcl_ros
+  pcl_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -41,6 +44,15 @@ else()
   set(QT_LIBRARIES Qt5::Widgets)
 endif()
 
+##PCL
+#set(PCL_DIR /usr/local/pcl_1.8/share/pcl-1.8)
+find_package(PCL 1.7 REQUIRED QUIET)
+add_definitions(${PCL_DEFINITIONS})
+add_definitions(-DPCL_FOUND)
+# message(STATUS "pcl include dir ${PCL_INCLUDE_DIRS}")
+# message(STATUS "pcl libraries ${PCL_LIBRARIES}")
+
+
 ## I prefer the Qt signals and slots to avoid defining "emit", "slots",
 ## etc because they can conflict with boost signals, so define QT_NO_KEYWORDS here.
 add_definitions(-DQT_NO_KEYWORDS)
@@ -53,6 +65,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
+
 
 
 ###################################
@@ -72,7 +85,6 @@ catkin_package(
 )
 
 
-
 ###########
 ## Build ##
 ###########
@@ -82,6 +94,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
+  ${PCL_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -93,7 +106,7 @@ add_library(${PROJECT_NAME}_plugin
   ${RobbagUtils_DIR_SRCS}
   ${MOC_FILES}
   )
-target_link_libraries(${PROJECT_NAME}_plugin ${QT_LIBRARIES} ${catkin_LIBRARIES} ${BOOST_SERIALIZATION})
+target_link_libraries(${PROJECT_NAME}_plugin ${QT_LIBRARIES} ${PCL_LIBRARIES}  ${catkin_LIBRARIES} ${BOOST_SERIALIZATION})
 
 install(TARGETS
   ${PROJECT_NAME}_plugin

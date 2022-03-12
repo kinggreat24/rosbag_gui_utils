@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 14:52:05
- * @LastEditTime: 2021-10-27 17:57:17
+ * @LastEditTime: 2021-11-17 17:06:20
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/rosbag_serialize_page.cpp
@@ -168,6 +168,7 @@ namespace rosbag_utils_gui
             // 设置起始时间
             ros::Time rosbag_begin_time = m_rosbag_view->getBeginTime();
             ros::Time rosbag_end_time = m_rosbag_view->getEndTime();
+            // QDateTime rosbag_begin_datetime = QDateTime::currentDateTime();
             rosbag_begin_label_->setText(QString("%1").arg(rosbag_begin_time.toSec()));
             rosbag_end_label_->setText(QString("%1").arg(rosbag_end_time.toSec()));
 
@@ -240,7 +241,6 @@ namespace rosbag_utils_gui
 
         //开始处理，
         //（1）创建对应的文件夹
-        std::cout << "debug RosbagSerializePage::onOKBtnClickedSlot 1" << std::endl;
         int rowCnt = rosbag_topics_tableWidget_->rowCount();
         std::vector<QString> checked_topics;
         std::map<QString, QString> savepath_topics;
@@ -262,11 +262,10 @@ namespace rosbag_utils_gui
         }
 
         //(2)在工作线程中进行解析
-        std::cout << "debug RosbagSerializePage::onOKBtnClickedSlot 2" << std::endl;
         m_rosbag_serialize_thread = new RosbagSerializeWorkingThread(
             this, m_rosbag_bag, m_rosbag_view, checked_topics, savepath_topics);
-
         m_rosbag_serialize_thread->start();
+        
         m_progressBar->setValue(0);
         int progress_status = 0;
         while (!m_rosbag_serialize_thread->isCompleted())
