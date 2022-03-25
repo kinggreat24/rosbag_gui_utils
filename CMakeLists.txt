@@ -21,7 +21,9 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
   pcl_msgs
+  livox_ros_driver
 )
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -43,6 +45,7 @@ else()
   ## make target_link_libraries(${QT_LIBRARIES}) pull in all required dependencies
   set(QT_LIBRARIES Qt5::Widgets)
 endif()
+
 
 ##PCL
 #set(PCL_DIR /usr/local/pcl_1.8/share/pcl-1.8)

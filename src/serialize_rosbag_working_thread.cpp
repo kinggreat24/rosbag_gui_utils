@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 10:12:26
- * @LastEditTime: 2022-03-12 21:00:29
+ * @LastEditTime: 2022-03-25 15:42:02
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/serialize_rosbag_working_thread.cpp
@@ -29,6 +29,8 @@ RosbagSerializeWorkingThread::RosbagSerializeWorkingThread(
     REGISTER_MESSAGE(LaserscanHandle, "sensor_msgs/LaserScan");
     REGISTER_MESSAGE(PointCloud2Handle, "sensor_msgs/PointCloud2");
     REGISTER_MESSAGE(OdomHandle, "nav_msgs/Odometry");
+    REGISTER_MESSAGE(LivoxCustomMsgHandle, "livox_ros_driver/CustomMsg");
+    REGISTER_MESSAGE(IMUHandle, "sensor_msgs/Imu");
    
     
     //Initalization handlers

@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 10:05:04
- * @LastEditTime: 2022-03-11 11:10:03
+ * @LastEditTime: 2022-03-25 15:44:31
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/include/rosbag_utils_gui/serialize_rosbag_working_thread.h
@@ -36,6 +36,8 @@
 #include "rosbag_utils_gui/odom_handle.h"
 #include "rosbag_utils_gui/serialize_factory.h"
 #include "rosbag_utils_gui/PointCloud2Handle.h"
+#include "rosbag_utils_gui/livox_driver_custom_msg_handle.h"
+#include "rosbag_utils_gui/IMU_handle.h"
 
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
