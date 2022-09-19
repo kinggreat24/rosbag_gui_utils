@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 14:23:33
- * @LastEditTime: 2021-10-27 17:56:59
+ * @LastEditTime: 2022-09-19 14:53:20
  * @LastEditors: kinggreat24
  * @Description: 解析rosbag到文件
  * @FilePath: /rosbag_utils_gui/include/rosbag_utils_gui/rosbag_serialize_page.h
@@ -20,6 +20,7 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QProgressBar>
+#include <QDateTime>
 
 #include "rosbag_utils_gui/load_rosbag_working_thread.h"
 #include "rosbag_utils_gui/serialize_rosbag_working_thread.h"
@@ -42,7 +43,7 @@ protected Q_SLOTS:
     void onLoadRosbagSlot();
 	void onSaveRosbagFileSlot();
 	void onOKBtnClickedSlot();
-
+	void onUpdateProgressSlot(const int progress);
 private:
 	QLineEdit   *rosbag_content_;
 	QLineEdit   *save_path_lineedit_;

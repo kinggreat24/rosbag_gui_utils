@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 10:12:26
- * @LastEditTime: 2022-03-25 15:42:02
+ * @LastEditTime: 2022-09-19 16:16:41
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/serialize_rosbag_working_thread.cpp
@@ -22,6 +22,10 @@ RosbagSerializeWorkingThread::RosbagSerializeWorkingThread(
     // }
     // m_rosbag_view->addQuery(*bag, rosbag::TopicQuery(v_query_topics));
 
+    beginTime_ = m_rosbag_view->getBeginTime();
+    endTime_ = m_rosbag_view->getEndTime();
+
+    duration_ = (endTime_ - beginTime_).toSec();
 
     // 注册处理函数
     REGISTER_MESSAGE(ImageHandle, "sensor_msgs/Image");
@@ -31,8 +35,7 @@ RosbagSerializeWorkingThread::RosbagSerializeWorkingThread(
     REGISTER_MESSAGE(OdomHandle, "nav_msgs/Odometry");
     REGISTER_MESSAGE(LivoxCustomMsgHandle, "livox_ros_driver/CustomMsg");
     REGISTER_MESSAGE(IMUHandle, "sensor_msgs/Imu");
-   
-    
+
     //Initalization handlers
     handlers_ = RosbagSerializeFactory::getHandlers();
     ROS_INFO("Handler size: %d", static_cast<int>(RosbagSerializeFactory::getMap().size()));
@@ -54,9 +57,17 @@ void RosbagSerializeWorkingThread::run()
     int id = 0;
     foreach (rosbag::MessageInstance const m, *m_rosbag_view)
     {
-        // std::cout << "message item id: " << id << std::endl;
         std::string type_name = m.getDataType();
-        std::cout << "message item id: " << id <<" type name: "<<type_name<< std::endl;
+        std::string topic_name = m.getTopic();
+        ros::Time c_time = m.getTime();
+        float c_progress = (c_time - beginTime_).toSec();
+        int progress_status = (c_progress / duration_) * 100;
+        Q_EMIT updateProgressSignal(progress_status);
+
+        // updateProgressSignal
+        if (std::find(std::begin(m_rosbag_topics), std::end(m_rosbag_topics), QString::fromStdString(topic_name)) == std::end(m_rosbag_topics))
+            continue;
+
         if (handlers_.find(type_name) != handlers_.end())
         {
             handlers_.find(type_name)->second->serialize(m);

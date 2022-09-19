@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-27 10:05:04
- * @LastEditTime: 2022-03-25 15:44:31
+ * @LastEditTime: 2022-09-19 12:29:56
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/include/rosbag_utils_gui/serialize_rosbag_working_thread.h
@@ -11,6 +11,7 @@
 #ifndef ROSBAG_SERIALIZA_WORKING_THREAD_H
 #define ROSBAG_SERIALIZA_WORKING_THREAD_H
 
+// #include <QObject>
 #include <QThread>
 #include <qfileinfo.h>
 
@@ -42,30 +43,39 @@
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-class RosbagSerializeWorkingThread: public QThread{
+class RosbagSerializeWorkingThread :public QThread
+{
     Q_OBJECT
 public:
-    RosbagSerializeWorkingThread(QObject *parent, const rosbag::Bag *bag, rosbag::View* view, 
-        const std::vector<QString>& topics, const std::map<QString, QString>& save_dir);
+    RosbagSerializeWorkingThread(QObject *parent, const rosbag::Bag *bag, rosbag::View *view,
+                                 const std::vector<QString> &topics, const std::map<QString, QString> &save_dir);
     ~RosbagSerializeWorkingThread();
 
     bool isCompleted()
-	{
-		return isComleted;
-	}
+    {
+        return isComleted;
+    }
+
+Q_SIGNALS:
+    void updateProgressSignal(const int progress);
+
 protected:
     void run();
 
 private:
-    const rosbag::Bag* m_rosbag_bag;
-    rosbag::View* m_rosbag_view;
+    const rosbag::Bag *m_rosbag_bag;
+    rosbag::View *m_rosbag_view;
     std::vector<QString> m_rosbag_topics;
     std::map<QString, QString> m_rosbag_save_dirs;
 
+    ros::Time beginTime_;
+    ros::Time endTime_;
+
+    float duration_;
+
     bool isComleted;
 
-    std::map<std::string, RosbagSerializeBaseHandle* > handlers_;
+    std::map<std::string, RosbagSerializeBaseHandle *> handlers_;
 };
 
-#endif//ROSBAG_SERIALIZA_WORKING_THREAD_H
-
+#endif //ROSBAG_SERIALIZA_WORKING_THREAD_H

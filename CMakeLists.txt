@@ -48,7 +48,6 @@ endif()
 
 
 ##PCL
-#set(PCL_DIR /usr/local/pcl_1.8/share/pcl-1.8)
 find_package(PCL 1.7 REQUIRED QUIET)
 add_definitions(${PCL_DEFINITIONS})
 add_definitions(-DPCL_FOUND)

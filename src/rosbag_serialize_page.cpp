@@ -1,7 +1,7 @@
 /*
  * @Author: kinggreat24
  * @Date: 2021-10-20 14:52:05
- * @LastEditTime: 2021-11-17 17:06:20
+ * @LastEditTime: 2022-09-19 15:19:01
  * @LastEditors: kinggreat24
  * @Description: 
  * @FilePath: /rosbag_utils_gui/src/rosbag_serialize_page.cpp
@@ -125,7 +125,7 @@ namespace rosbag_utils_gui
     void RosbagSerializePage::onLoadRosbagSlot()
     {
         QFileDialog *fd = new QFileDialog(this); //                                                                 //
-        fd->setDirectory(".");
+        fd->setDirectory("");
         fd->setNameFilter(tr("rosbag file(*.bag)")); //
         fd->setFileMode(QFileDialog::ExistingFiles);
         fd->setViewMode(QFileDialog::List); //
@@ -169,8 +169,17 @@ namespace rosbag_utils_gui
             ros::Time rosbag_begin_time = m_rosbag_view->getBeginTime();
             ros::Time rosbag_end_time = m_rosbag_view->getEndTime();
             // QDateTime rosbag_begin_datetime = QDateTime::currentDateTime();
-            rosbag_begin_label_->setText(QString("%1").arg(rosbag_begin_time.toSec()));
-            rosbag_end_label_->setText(QString("%1").arg(rosbag_end_time.toSec()));
+            double begin_secs = rosbag_begin_time.toSec();
+            double end_secs = rosbag_end_time.toSec();
+            QDateTime dt_begin_ = QDateTime::fromTime_t (begin_secs);
+            QDateTime dt_end_ = QDateTime::fromTime_t (end_secs);
+            rosbag_begin_label_->setText(QString("%1 (%2)").arg(dt_begin_.toString(Qt::TextDate)).arg(QString::number(begin_secs,'f',2)));
+            rosbag_end_label_->setText(QString("%1 (%2)").arg(dt_end_.toString(Qt::TextDate)).arg(QString::number(end_secs,'f',2)));
+          
+
+            // rosbag的时长
+            ros::Duration time_duration = rosbag_end_time - rosbag_begin_time;
+            rosbag_duration_label_->setText(QString("%1 s").arg(QString::number(time_duration.toSec(),'f',2)));
 
             //设置topic
             m_rosbag_connection_infos = m_load_rosbag_thread->getConnectionInfo();
@@ -229,7 +238,7 @@ namespace rosbag_utils_gui
     void RosbagSerializePage::onOKBtnClickedSlot()
     {
         QDir dir(save_path_lineedit_->text());
-        if (!dir.exists())
+        if (!dir.exists() || save_path_lineedit_->text().isEmpty())
         {
             QMessageBox msgResultBox;
             msgResultBox.setText(QString::fromLocal8Bit("目录: %1 不存在，请重新选择保存路径！\n").arg(save_path_lineedit_->text()));
@@ -265,26 +274,42 @@ namespace rosbag_utils_gui
         m_rosbag_serialize_thread = new RosbagSerializeWorkingThread(
             this, m_rosbag_bag, m_rosbag_view, checked_topics, savepath_topics);
         m_rosbag_serialize_thread->start();
-        
-        m_progressBar->setValue(0);
-        int progress_status = 0;
-        while (!m_rosbag_serialize_thread->isCompleted())
+
+        connect(m_rosbag_serialize_thread, &RosbagSerializeWorkingThread::updateProgressSignal, this, &RosbagSerializePage::onUpdateProgressSlot);
+
+        // m_progressBar->setValue(0);
+        // int progress_status = 0;
+        // while (!m_rosbag_serialize_thread->isCompleted())
+        // {
+        //     progress_status += 3;
+        //     if (progress_status >= 100)
+        //         progress_status = 0;
+        //     m_progressBar->setValue(progress_status);
+
+        //     usleep(1000000);
+        // }
+        // m_progressBar->setValue(100);
+
+        // //
+        // QMessageBox msgResultBox;
+        // msgResultBox.setText(QString::fromLocal8Bit("处理完成！\n"));
+        // msgResultBox.setIcon(QMessageBox::Information);
+        // msgResultBox.addButton(QMessageBox::Ok);
+        // msgResultBox.exec();
+    }
+
+    void RosbagSerializePage::onUpdateProgressSlot(const int progress_status)
+    {
+        m_progressBar->setValue(progress_status);
+
+        if (progress_status >= 100)
         {
-            progress_status += 3;
-            if (progress_status >= 100)
-                progress_status = 0;
-            m_progressBar->setValue(progress_status);
-
-            usleep(1000000);
+            QMessageBox msgResultBox;
+            msgResultBox.setText(QString::fromLocal8Bit("处理完成！\n"));
+            msgResultBox.setIcon(QMessageBox::Information);
+            msgResultBox.addButton(QMessageBox::Ok);
+            msgResultBox.exec();
         }
-        m_progressBar->setValue(100);
-
-        //
-        QMessageBox msgResultBox;
-        msgResultBox.setText(QString::fromLocal8Bit("处理完成！\n"));
-        msgResultBox.setIcon(QMessageBox::Information);
-        msgResultBox.addButton(QMessageBox::Ok);
-        msgResultBox.exec();
     }
 
 }
